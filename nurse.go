@@ -5,12 +5,13 @@ import(
 	)	
 type Nurse struct{
 	gorm.Model
-	FullName string `json:"fullname"`
-	Email string `json:"email"`
-	ContactNumber string `json:"contactnumber"`
-	WorkingDays string `json:"workingdays"`
-	DutyStartTime string `json:"dutystarttime"`
-	DutyEndTime string `json:"dutyendtime"`
+	FullName string `json:"full_name" validate:"required min=2 max=30"`
+	Email string `json:"email" validate:"email,required"`
+	ContactNumber string `json:"contact_number" validate:"required min=8 max=10"`
+	WorkingDays string `json:"working_days" validate:"required"`
+	WorkingShift string `json:"working_shift" validate:"required , eq=morning|eq=day|eq=night"`
+	DutyStartTime string `json:"duty_start_time" validate:"required"`
+	DutyEndTime string `json:"duty_end_time" validate:"required"`
 	Address string `json:"address"`
-	Gender string `json:"gender"`
+	Gender string `json:"gender" valiate:"eq:Male | eq:Female | eq:Other"`
 }
