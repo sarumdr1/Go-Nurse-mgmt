@@ -1,17 +1,18 @@
-package main 
+package controller 
 
 import (
 	"fmt"
 	"net/http"
 	"encoding/json"
 	"github.com/gorilla/mux"
+    "github.com/go-nurse-mgmt/pkg/models"
 
 )
 
 func CreateNurse(w http.ResponseWriter, r *http.Request){
     w.Header().Set("Content-Type", "application/json")
 
-	var nurse Nurse
+	var nurse models.Nurse
     if err := json.NewDecoder(r.Body).Decode(&nurse); err != nil {
         fmt.Println(err)
 		fmt.Println(json.NewDecoder(r.Body).Decode(&nurse))

@@ -1,4 +1,4 @@
-package main
+package models
 
 import(
 "gorm.io/gorm"
@@ -13,5 +13,5 @@ type Nurse struct{
 	DutyStartTime string `json:"duty_start_time" validate:"required"`
 	DutyEndTime string `json:"duty_end_time" validate:"required"`
 	Address string `json:"address"`
-	Gender string `json:"gender" valiate:"eq:Male | eq:Female | eq:Other"`
+	Gender string `json:"gender" validate:"eq:Male | eq:Female | eq:Other"`
 }
