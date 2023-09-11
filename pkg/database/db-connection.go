@@ -1,33 +1,40 @@
-package main
+package database
 
 import (
-    "log"
-    "os"
-    "gorm.io/driver/postgres"
-    "gorm.io/gorm"
-    "github.com/joho/godotenv"
+	"example/go-nurse-mgmt/pkg/models"
+	"log"
+	"os"
+
+	"github.com/joho/godotenv"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var db *gorm.DB
 var err error
 
 func DataMigration() {
-  err := godotenv.Load()
-  if err != nil {
-    log.Fatal("Error loading .env file")
-  }
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-  password := os.Getenv("PASSWORD")
-  userName := os.Getenv("USER_NAME")
-  dbName := os.Getenv("DBNAME")
+	password := os.Getenv("PASSWORD")
+	userName := os.Getenv("USER_NAME")
+	dbName := os.Getenv("DB_NAME")
 
-  connStr := "host=localhost user="+userName+" password="+password+" dbname="+dbName+" sslmode=disable"
-   
-    db, err = gorm.Open(postgres.Open(connStr),&gorm.Config{})
-    if err != nil {
-      panic(err)
-    } else{
-        log.Println("DB connected")
-    }
-    db.AutoMigrate(&Nurse{})
+	connStr := "host=localhost user=" + userName + " password=" + password + " dbname=" + dbName + " sslmode=disable"
+
+	db, err = gorm.Open(postgres.Open(connStr), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	} else {
+		log.Println("DB connected")
+	}
+	db.AutoMigrate(&models.Nurse{})
+	db.AutoMigrate(&models.User{})
+}
+
+func GetDB() *gorm.DB {
+	return db
 }
