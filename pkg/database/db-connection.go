@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -14,10 +13,6 @@ var db *gorm.DB
 var err error
 
 func DataMigration() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
 
 	password := os.Getenv("PASSWORD")
 	userName := os.Getenv("USER_NAME")

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"example/go-nurse-mgmt/pkg/database"
 	"example/go-nurse-mgmt/pkg/models"
+	"example/go-nurse-mgmt/pkg/utils"
 	"log"
 	"net/http"
 
@@ -17,7 +18,6 @@ func CreateNurse(w http.ResponseWriter, r *http.Request) {
 
 	var nurse models.Nurse
 	if err := json.NewDecoder(r.Body).Decode(&nurse); err != nil {
-		log.Println(err)
 		log.Fatal(json.NewDecoder(r.Body).Decode(&nurse))
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -56,6 +56,8 @@ func GetNurseById(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	nurse.CreatedAtFormatted = utils.FormatDate(nurse.CreatedAt.String())
+
 	// Respond with the fetched data as JSON
 	json.NewEncoder(w).Encode(nurse)
 }

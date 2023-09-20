@@ -14,13 +14,18 @@ type loginUserResponse struct {
 	Email string `json:"email"`
 }
 
+type RequestData struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	// Define the structure that matches your JSON data
+}
+
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	db := database.GetDB()
 
 	var user models.User
 	if err := json.NewDecoder(r.Body).Decode(&user); err != nil {
-		log.Println(err)
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -37,12 +42,14 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 func Login(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	db := database.GetDB()
-	w.Header().Set("Content-Type", "application/json")
 
-	email := r.FormValue("email")
-	password := r.FormValue("password")
-
-	err := db.Where("email = ? AND password = ?", email, password).First(&user).Error
+	var requestData RequestData
+	decoder := json.NewDecoder(r.Body)
+	if err := decoder.Decode(&requestData); err != nil {
+		http.Error(w, "Invalid JSON request body", http.StatusBadRequest)
+		return
+	}
+	err := db.Where("email = ? AND password = ?", requestData.Email, requestData.Password).First(&user).Error
 
 	if err != nil {
 		log.Printf("User not found: %v", err)
