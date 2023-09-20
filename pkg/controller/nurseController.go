@@ -7,6 +7,7 @@ import (
 	"example/go-nurse-mgmt/pkg/utils"
 	"log"
 	"net/http"
+	"sort"
 
 	"github.com/gorilla/mux"
 )
@@ -43,6 +44,18 @@ func GetNurse(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
+	sort.Slice(nurses, func(i, j int) bool {
+		// Check if one of the nurses is a manager
+		if nurses[i].Role == "rounding_manager" && nurses[j].Role != "rounding_manager" {
+			return true
+		} else if nurses[i].Role != "rounding_manager" && nurses[j].Role == "rounding_manager" {
+			return false
+		}
+
+		// If both have the same role or are non-managers, sort by name
+		return nurses[i].Role < nurses[j].Role
+	})
 
 	// Respond with the fetched data as JSON
 	json.NewEncoder(w).Encode(nurses)
