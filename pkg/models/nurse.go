@@ -15,5 +15,6 @@ type Nurse struct {
 	DutyEndTime        string `json:"duty_end_time" validate:"required"`
 	Address            string `json:"address"`
 	Gender             string `json:"gender" validate:"eq:Male | eq:Female | eq:Other"`
+	Role               string `json:"role" validate:"eq:Rounding Manager | eq:Normal" default:"Normal"`
 	CreatedAtFormatted string `json:"created_at_formatted"`
 }
